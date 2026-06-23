@@ -1,6 +1,6 @@
 Modrinth page: https://modrinth.com/mod/fesuoy-easy-commands
 
-## Have you wanted to access minecraft commands easily? 
+## Have you wanted to access minecraft commands easily?
 
 Suppose you wanted a OP Netherite sword right now without using /enchant command over and over.. now with this mod you can do /enchantsword while holding any sword!
 
@@ -34,7 +34,7 @@ To be honest, I don't debug much since I originally made this when I was bored, 
 If you find any, Please report them on my [GitHub repository](https://github.com/Fesuoy1/Easy-Commands-26.X/issues).
 
 ## Dependencies
-Since this mod uses CommandRegistrationCallback, You will need to install [Fabric API](https://modrinth.com/mod/fabric-api)!
+- [Fabric API](https://modrinth.com/mod/fabric-api)
 
-## This is Open Source.
+## This Is Open Source.
 I probably will port this to future versions of minecraft available, but definitely no plans for more backporting. If you want to backport to older versions then please [fork this repository](https://github.com/Fesuoy1/Easy-Commands-26.X).
