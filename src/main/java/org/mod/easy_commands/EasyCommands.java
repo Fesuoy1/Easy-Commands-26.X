@@ -4,7 +4,6 @@ import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -30,18 +29,14 @@ import org.mod.easy_commands.command.tree.ResetTreeHeightCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EasyCommands implements ModInitializer, PreLaunchEntrypoint {
+public class EasyCommands implements ModInitializer {
     public static final String MOD_ID = "easy_commands";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
-    public void onPreLaunch() {
-        ModGameRules.loaded();
-    }
-
-    @Override
     public void onInitialize() {
         try {
+            ModGameRules.register();
             LOGGER.info("Easy Commands Initialized");
             CommandRegistrationCallback.EVENT.register(this::registerCommands);
             ServerLifecycleEvents.SERVER_STARTED.register(server -> ModGameRules.worlds = server.getAllLevels());

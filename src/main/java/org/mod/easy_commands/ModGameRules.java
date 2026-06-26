@@ -11,21 +11,28 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public class ModGameRules {
-    public static void loaded() {
-        // Forces static initializer to run so that it registers game rules early
+    private static boolean registered = false;
+
+    public static GameRule<Integer> TREE_HEIGHT;
+    public static GameRule<Boolean> EXPLOSIVE_PROJECTILES_ENABLED;
+    public static GameRule<Double> EXPLOSION_POWER;
+
+    public static void register() {
+        if (registered) return;
+        registered = true;
+
+        TREE_HEIGHT = GameRuleBuilder.forInteger(1)
+                .category(GameRuleCategory.MISC)
+                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "tree_height"));
+
+        EXPLOSIVE_PROJECTILES_ENABLED = GameRuleBuilder.forBoolean(false)
+                .category(GameRuleCategory.MISC)
+                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosive_projectiles"));
+
+        EXPLOSION_POWER = GameRuleBuilder.forDouble(2.5D)
+                .category(GameRuleCategory.MISC)
+                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosion_power"));
     }
-
-    public static final GameRule<Integer> TREE_HEIGHT = GameRuleBuilder.forInteger(1)
-            .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "tree_height"));
-
-    public static final GameRule<Boolean> EXPLOSIVE_PROJECTILES_ENABLED = GameRuleBuilder.forBoolean(false)
-            .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosive_projectiles"));
-
-    public static final GameRule<Double> EXPLOSION_POWER = GameRuleBuilder.forDouble(2.5D)
-            .category(GameRuleCategory.MISC)
-            .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosion_power"));
 
     public static Iterable<ServerLevel> worlds;
 
