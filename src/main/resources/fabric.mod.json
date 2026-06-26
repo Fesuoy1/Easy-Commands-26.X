@@ -19,16 +19,12 @@
 		"main": [
 			"org.mod.easy_commands.EasyCommands"
 		],
-		"client": [
-			"org.mod.easy_commands.EasyCommandsClient"
+		"preLaunch": [
+			"org.mod.easy_commands.EasyCommands"
 		]
 	},
 	"mixins": [
-		"easy_commands.mixins.json",
-		{
-			"config": "easy_commands.client.mixins.json",
-			"environment": "client"
-		}
+		"easy_commands.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.19.0",
