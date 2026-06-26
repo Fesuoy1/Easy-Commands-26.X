@@ -8,6 +8,7 @@ import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import org.mod.easy_commands.command.enchant.EnchantSwordCommand;
+import org.mod.easy_commands.command.enchant.EnchantPickaxeCommand;
 import org.mod.easy_commands.command.enchant.KnockbackCommand;
 import org.mod.easy_commands.command.enchant.KnockbackStickCommand;
 import org.mod.easy_commands.command.explosive.ExplodeCommand;
@@ -48,6 +49,7 @@ public class EasyCommands implements ModInitializer {
     private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
         RepairCommand.register(dispatcher);
         EnchantSwordCommand.register(dispatcher);
+        EnchantPickaxeCommand.register(dispatcher);
         RepairInventoryCommand.register(dispatcher);
         RepairAllCommand.register(dispatcher);
         KnockbackCommand.register(dispatcher);
