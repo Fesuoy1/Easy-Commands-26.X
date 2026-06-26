@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -40,7 +39,7 @@ public class EnchantPickaxeCommand implements Command<CommandSourceStack> {
         if (player != null) {
             ItemStack stack = player.getMainHandItem();
             Item item = stack.getItem();
-            if (item == Items.WOODEN_PICKAXE || item == Items.STONE_PICKAXE || item == Items.GOLDEN_PICKAXE || item == Items.COPPER_PICKAXE || item == Items.IRON_PICKAXE || item == Items.DIAMOND_PICKAXE || item == Items.NETHERITE_PICKAXE) {
+            if (item.getName(stack).getString().toLowerCase().contains("pickaxe")) {
                 HolderLookup.Provider registries = context.getSource().getServer().registryAccess();
                 HolderLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
                 final boolean[] enchanted = {false};

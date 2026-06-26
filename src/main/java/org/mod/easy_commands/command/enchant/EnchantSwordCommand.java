@@ -16,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -42,7 +41,7 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
         if (player != null) {
             ItemStack stack = player.getMainHandItem();
             Item item = stack.getItem();
-            if (item == Items.WOODEN_SWORD || item == Items.STONE_SWORD || item == Items.GOLDEN_SWORD || item == Items.COPPER_SWORD || item == Items.IRON_SWORD || item == Items.DIAMOND_SWORD || item == Items.NETHERITE_SWORD) {
+            if (item.getName(stack).getString().toLowerCase().contains("sword")) {
                 HolderLookup.Provider registries = context.getSource().getServer().registryAccess();
                 HolderLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
                 final boolean[] enchanted = {false};
