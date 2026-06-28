@@ -20,6 +20,15 @@
 			"org.mod.easy_commands.EasyCommands"
 		]
 	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.modrinth": "https://modrinth.com/mod/fesuoy-easy-commands",
+				"modmenu.github_releases": "https://github.com/Fesuoy1/Easy-Commands-26.X/releases"
+			},
+			"update_checker": true
+		}
+	},
 	"mixins": [
 		"easy_commands.mixins.json"
 	],
