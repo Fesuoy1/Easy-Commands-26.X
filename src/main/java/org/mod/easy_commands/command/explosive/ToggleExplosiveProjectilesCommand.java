@@ -2,6 +2,7 @@ package org.mod.easy_commands.command.explosive;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -12,16 +13,25 @@ public class ToggleExplosiveProjectilesCommand implements Command<CommandSourceS
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
-        context.getSource().getLevel().getGameRules().set(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED, !ModGameRules.isExplosiveProjectilesEnabled(context.getSource().getLevel()), context.getSource().getServer());
-        boolean enabled = context.getSource().getLevel().getGameRules().get(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED);
-        String message = enabled ? "enabled" : "disabled";
-        context.getSource().sendSuccess(() -> Component.literal("Explosive projectiles " + message), true);
+        try {
+            boolean value = BoolArgumentType.getBool(context, "value");
+            context.getSource().getLevel().getGameRules().set(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED, value, context.getSource().getServer());
+            String message = value ? "enabled" : "disabled";
+            context.getSource().sendSuccess(() -> Component.literal("Explosive projectiles " + message), true);
+        } catch (IllegalArgumentException _) {
+            context.getSource().getLevel().getGameRules().set(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED, !ModGameRules.isExplosiveProjectilesEnabled(context.getSource().getLevel()), context.getSource().getServer());
+            boolean enabled = context.getSource().getLevel().getGameRules().get(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED);
+            String message = enabled ? "enabled" : "disabled";
+            context.getSource().sendSuccess(() -> Component.literal("Explosive projectiles " + message), true);
+        }
         return Command.SINGLE_SUCCESS;
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("toggleExplosiveProjectiles")
                 .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                .executes(new ToggleExplosiveProjectilesCommand()));
+                .executes(new ToggleExplosiveProjectilesCommand())
+                .then(Commands.argument("value", BoolArgumentType.bool())
+                        .executes(new ToggleExplosiveProjectilesCommand())));
     }
 }

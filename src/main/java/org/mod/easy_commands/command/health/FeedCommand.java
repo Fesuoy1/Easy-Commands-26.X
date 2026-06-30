@@ -14,13 +14,25 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 
 import java.util.Collection;
+import java.util.List;
 
 public class FeedCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         CommandSourceStack source = context.getSource();
-        Collection<ServerPlayer> players = EntityArgument.getPlayers(context, "allPlayers");
+        Collection<ServerPlayer> players;
+        try {
+            players = EntityArgument.getPlayers(context, "allPlayers");
+        } catch (IllegalArgumentException _) {
+            ServerPlayer sender = source.getPlayer();
+            if (sender != null) {
+                players = List.of(sender);
+            } else {
+                source.sendFailure(Component.literal("No players found."));
+                return Command.SINGLE_SUCCESS;
+            }
+        }
 
         if (!players.isEmpty()) {
             for (ServerPlayer player : players) {
@@ -37,6 +49,7 @@ public class FeedCommand implements Command<CommandSourceStack> {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("feed")
                 .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                .executes(new FeedCommand())
                 .then(Commands.argument("allPlayers", EntityArgument.players())
                         .executes(new FeedCommand())));
     }

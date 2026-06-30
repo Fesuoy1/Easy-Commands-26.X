@@ -4,8 +4,10 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -19,8 +21,16 @@ public class KnockbackStickCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
-        int level = IntegerArgumentType.getInteger(context, "level");
+        int level = 10;
+        try {
+            level = IntegerArgumentType.getInteger(context, "level");
+        } catch (IllegalArgumentException _) {}
+
         ServerPlayer player = context.getSource().getPlayer();
+        try {
+            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+            if (target != null) player = target;
+        } catch (IllegalArgumentException | CommandSyntaxException _) {}
         if (player != null) {
             ItemStack stack = enchantStick(context, level);
             int slot = player.getInventory().getFreeSlot();
@@ -35,6 +45,7 @@ public class KnockbackStickCommand implements Command<CommandSourceStack> {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("knockbackstick")
+                .executes(new KnockbackStickCommand())
                 .then(Commands.argument("level", IntegerArgumentType.integer())
                         .suggests((_, builder) -> {
                             builder.suggest(5);
@@ -43,7 +54,9 @@ public class KnockbackStickCommand implements Command<CommandSourceStack> {
                             builder.suggest(50);
                             return builder.buildFuture();
                         })
-                        .executes(new KnockbackStickCommand())));
+                        .executes(new KnockbackStickCommand())
+                        .then(Commands.argument("target", EntityArgument.player())
+                                .executes(new KnockbackStickCommand()))));
     }
 
     private ItemStack enchantStick(CommandContext<CommandSourceStack> context, int level) {

@@ -20,7 +20,12 @@ public class RepairAllCommand implements Command<CommandSourceStack> {
         ServerLevel world = source.getLevel();
         final boolean[] repaired = {false};
 
-        if (BoolArgumentType.getBool(context, "repairInventory")) {
+        boolean repairInventory = false;
+        try {
+            repairInventory = BoolArgumentType.getBool(context, "repairInventory");
+        } catch (IllegalArgumentException _) {}
+
+        if (repairInventory) {
             world.players().forEach(player -> {
                 for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                     ItemStack stack = player.getInventory().getItem(i);
@@ -50,6 +55,7 @@ public class RepairAllCommand implements Command<CommandSourceStack> {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("repairall")
                 .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
+                .executes(new RepairAllCommand())
                 .then(Commands.argument("repairInventory", BoolArgumentType.bool())
                         .executes(new RepairAllCommand())));
     }

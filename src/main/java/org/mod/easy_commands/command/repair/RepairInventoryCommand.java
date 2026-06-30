@@ -3,8 +3,10 @@ package org.mod.easy_commands.command.repair;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +19,10 @@ public class RepairInventoryCommand implements Command<CommandSourceStack> {
     @Override
     public int run(CommandContext<CommandSourceStack> context) {
         ServerPlayer player = context.getSource().getPlayer();
+        try {
+            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+            if (target != null) player = target;
+        } catch (IllegalArgumentException | CommandSyntaxException _) {}
         boolean repaired = false;
         if (player != null) {
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
@@ -38,6 +44,8 @@ public class RepairInventoryCommand implements Command<CommandSourceStack> {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("repairinventory")
                 .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
-                .executes(new RepairInventoryCommand()));
+                .executes(new RepairInventoryCommand())
+                .then(Commands.argument("target", EntityArgument.player())
+                        .executes(new RepairInventoryCommand())));
     }
 }
