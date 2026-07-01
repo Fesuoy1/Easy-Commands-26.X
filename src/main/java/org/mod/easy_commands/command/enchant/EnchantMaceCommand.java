@@ -22,16 +22,17 @@ import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Map;
 
-public class EnchantSwordCommand implements Command<CommandSourceStack> {
+public class EnchantMaceCommand implements Command<CommandSourceStack> {
 
     private static final Map<String, ResourceKey<Enchantment>> ENCHANTMENT_MAP = Map.of(
-            "sharpness", Enchantments.SHARPNESS,
-            "sweepingEdge", Enchantments.SWEEPING_EDGE,
-            "mending", Enchantments.MENDING,
-            "unbreaking", Enchantments.UNBREAKING,
+            "density", Enchantments.DENSITY,
+            "breach", Enchantments.BREACH,
+            "windBurst", Enchantments.WIND_BURST,
+            "smite", Enchantments.SMITE,
+            "baneOfArthropods", Enchantments.BANE_OF_ARTHROPODS,
             "fireAspect", Enchantments.FIRE_ASPECT,
-            "knockback", Enchantments.KNOCKBACK,
-            "looting", Enchantments.LOOTING
+            "mending", Enchantments.MENDING,
+            "unbreaking", Enchantments.UNBREAKING
     );
 
     @Override
@@ -40,7 +41,7 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
         if (player != null) {
             ItemStack stack = player.getMainHandItem();
             Item item = stack.getItem();
-            if (item.getName(stack).getString().toLowerCase().contains("sword")) {
+            if (item.getName(stack).getString().toLowerCase().contains("mace")) {
                 HolderLookup.Provider registries = context.getSource().getServer().registryAccess();
                 HolderLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
                 final boolean[] enchanted = {false};
@@ -49,14 +50,14 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
                         try {
                             mutable.set(lookup.getOrThrow(entry.getValue()), IntegerArgumentType.getInteger(context, entry.getKey()));
                             enchanted[0] = true;
-                        } catch (IllegalArgumentException _) {} // optional
+                        } catch (IllegalArgumentException _) {}
                     }
                 });
                 ServerLevel world = player.level();
                 if (enchanted[0])
                     world.playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
             } else {
-                context.getSource().sendFailure(Component.literal("You must hold a sword to enchant."));
+                context.getSource().sendFailure(Component.literal("You must hold a mace to enchant."));
                 return Command.SINGLE_SUCCESS;
             }
         }
@@ -64,22 +65,24 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("enchantsword")
+        dispatcher.register(Commands.literal("enchantmace")
                 .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
-                .then(Commands.argument("sharpness", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("sweepingEdge", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("mending", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("unbreaking", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
+                .then(Commands.argument("density", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
+                .then(Commands.argument("breach", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
+                .then(Commands.argument("windBurst", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
+                .then(Commands.argument("smite", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
+                .then(Commands.argument("baneOfArthropods", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
                 .then(Commands.argument("fireAspect", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("knockback", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("looting", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                ))))))));
+                    .executes(new EnchantMaceCommand())
+                .then(Commands.argument("mending", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
+                .then(Commands.argument("unbreaking", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantMaceCommand())
+                )))))))));
     }
 }

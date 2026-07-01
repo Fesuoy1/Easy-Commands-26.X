@@ -7,8 +7,17 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import org.mod.easy_commands.command.enchant.EnchantSwordCommand;
+import org.mod.easy_commands.command.enchant.EnchantAxeCommand;
+import org.mod.easy_commands.command.enchant.EnchantBowCommand;
+import org.mod.easy_commands.command.enchant.EnchantCrossbowCommand;
+import org.mod.easy_commands.command.enchant.EnchantFishingRodCommand;
+import org.mod.easy_commands.command.enchant.EnchantHoeCommand;
+import org.mod.easy_commands.command.enchant.EnchantMaceCommand;
 import org.mod.easy_commands.command.enchant.EnchantPickaxeCommand;
+import org.mod.easy_commands.command.enchant.EnchantShovelCommand;
+import org.mod.easy_commands.command.enchant.EnchantSpearCommand;
+import org.mod.easy_commands.command.enchant.EnchantSwordCommand;
+import org.mod.easy_commands.command.enchant.EnchantTridentCommand;
 import org.mod.easy_commands.command.enchant.KnockbackCommand;
 import org.mod.easy_commands.command.enchant.KnockbackStickCommand;
 import org.mod.easy_commands.command.explosive.ExplodeCommand;
@@ -47,24 +56,44 @@ public class EasyCommands implements ModInitializer {
     }
 
     private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
+        // Repair Commands
         RepairCommand.register(dispatcher);
-        EnchantSwordCommand.register(dispatcher);
-        EnchantPickaxeCommand.register(dispatcher);
         RepairInventoryCommand.register(dispatcher);
         RepairAllCommand.register(dispatcher);
+
+        // Enchant Commands
+        EnchantSwordCommand.register(dispatcher);
+        EnchantPickaxeCommand.register(dispatcher);
+        EnchantAxeCommand.register(dispatcher);
+        EnchantShovelCommand.register(dispatcher);
+        EnchantHoeCommand.register(dispatcher);
+        EnchantBowCommand.register(dispatcher);
+        EnchantCrossbowCommand.register(dispatcher);
+        EnchantMaceCommand.register(dispatcher);
+        EnchantSpearCommand.register(dispatcher);
+        EnchantTridentCommand.register(dispatcher);
+        EnchantFishingRodCommand.register(dispatcher);
         KnockbackCommand.register(dispatcher);
         KnockbackStickCommand.register(dispatcher);
+
+        // Health Commands
         KillAllCommand.register(dispatcher);
         HealCommand.register(dispatcher);
         FeedCommand.register(dispatcher);
+
+        // Time Commands
         DayCommand.register(dispatcher);
         NoonCommand.register(dispatcher);
         NightCommand.register(dispatcher);
         MidnightCommand.register(dispatcher);
+
+        // Explosion Commands
         SetExplosionPowerCommand.register(dispatcher);
+        ToggleExplosiveProjectilesCommand.register(dispatcher);
         ExplodeCommand.register(dispatcher);
+
+        // Tree Commands
         ModifyTreeHeightCommand.register(dispatcher);
         ResetTreeHeightCommand.register(dispatcher);
-        ToggleExplosiveProjectilesCommand.register(dispatcher);
     }
 }

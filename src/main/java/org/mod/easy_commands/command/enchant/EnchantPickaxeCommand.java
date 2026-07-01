@@ -20,18 +20,17 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EnchantPickaxeCommand implements Command<CommandSourceStack> {
 
-    private static final Map<String, ResourceKey<Enchantment>> ENCHANTMENT_MAP = new HashMap<>() {{
-        put("efficiency", Enchantments.EFFICIENCY);
-        put("fortune", Enchantments.FORTUNE);
-        put("mending", Enchantments.MENDING);
-        put("unbreaking", Enchantments.UNBREAKING);
-        put("silkTouch", Enchantments.SILK_TOUCH);
-    }};
+    private static final Map<String, ResourceKey<Enchantment>> ENCHANTMENT_MAP = Map.of(
+            "efficiency", Enchantments.EFFICIENCY,
+            "fortune", Enchantments.FORTUNE,
+            "mending", Enchantments.MENDING,
+            "unbreaking", Enchantments.UNBREAKING,
+            "silkTouch", Enchantments.SILK_TOUCH
+    );
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) {

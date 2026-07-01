@@ -22,16 +22,15 @@ import net.minecraft.world.item.enchantment.Enchantments;
 
 import java.util.Map;
 
-public class EnchantSwordCommand implements Command<CommandSourceStack> {
+public class EnchantAxeCommand implements Command<CommandSourceStack> {
 
     private static final Map<String, ResourceKey<Enchantment>> ENCHANTMENT_MAP = Map.of(
+            "efficiency", Enchantments.EFFICIENCY,
+            "fortune", Enchantments.FORTUNE,
+            "silkTouch", Enchantments.SILK_TOUCH,
             "sharpness", Enchantments.SHARPNESS,
-            "sweepingEdge", Enchantments.SWEEPING_EDGE,
             "mending", Enchantments.MENDING,
-            "unbreaking", Enchantments.UNBREAKING,
-            "fireAspect", Enchantments.FIRE_ASPECT,
-            "knockback", Enchantments.KNOCKBACK,
-            "looting", Enchantments.LOOTING
+            "unbreaking", Enchantments.UNBREAKING
     );
 
     @Override
@@ -40,7 +39,8 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
         if (player != null) {
             ItemStack stack = player.getMainHandItem();
             Item item = stack.getItem();
-            if (item.getName(stack).getString().toLowerCase().contains("sword")) {
+            String name = item.getName(stack).getString().toLowerCase();
+            if (name.contains("axe") && !name.contains("pickaxe") && !name.contains("waxed")) {
                 HolderLookup.Provider registries = context.getSource().getServer().registryAccess();
                 HolderLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
                 final boolean[] enchanted = {false};
@@ -49,14 +49,14 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
                         try {
                             mutable.set(lookup.getOrThrow(entry.getValue()), IntegerArgumentType.getInteger(context, entry.getKey()));
                             enchanted[0] = true;
-                        } catch (IllegalArgumentException _) {} // optional
+                        } catch (IllegalArgumentException _) {}
                     }
                 });
                 ServerLevel world = player.level();
                 if (enchanted[0])
                     world.playSound(null, player.position().x, player.position().y, player.position().z, SoundEvents.ANVIL_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
             } else {
-                context.getSource().sendFailure(Component.literal("You must hold a sword to enchant."));
+                context.getSource().sendFailure(Component.literal("You must hold an axe to enchant."));
                 return Command.SINGLE_SUCCESS;
             }
         }
@@ -64,22 +64,20 @@ public class EnchantSwordCommand implements Command<CommandSourceStack> {
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register(Commands.literal("enchantsword")
+        dispatcher.register(Commands.literal("enchantaxe")
                 .requires(Commands.hasPermission(Commands.LEVEL_ADMINS))
+                .then(Commands.argument("efficiency", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantAxeCommand())
+                .then(Commands.argument("fortune", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantAxeCommand())
+                .then(Commands.argument("silkTouch", IntegerArgumentType.integer(-1))
+                    .executes(new EnchantAxeCommand())
                 .then(Commands.argument("sharpness", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("sweepingEdge", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
+                    .executes(new EnchantAxeCommand())
                 .then(Commands.argument("mending", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
+                    .executes(new EnchantAxeCommand())
                 .then(Commands.argument("unbreaking", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("fireAspect", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("knockback", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                .then(Commands.argument("looting", IntegerArgumentType.integer(-1))
-                    .executes(new EnchantSwordCommand())
-                ))))))));
+                    .executes(new EnchantAxeCommand())
+                )))))));
     }
 }
