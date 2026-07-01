@@ -1,5 +1,25 @@
 # Changelog History
 
+## [2.3.0] - 2026-07-01
+
+### Changes:
+- Added new tool/weapon enchant commands:
+  - `/enchantaxe <efficiency> [fortune] [silkTouch] [sharpness] [mending] [unbreaking]`
+  - `/enchantshovel <efficiency> [fortune] [silkTouch] [mending] [unbreaking]`
+  - `/enchanthoe <efficiency> [fortune] [silkTouch] [mending] [unbreaking]`
+  - `/enchantbow <power> [punch] [flame] [infinity] [mending] [unbreaking]`
+  - `/enchantcrossbow <multishot> [piercing] [quickCharge] [mending] [unbreaking]`
+  - `/enchantmace <density> [breach] [windBurst] [smite] [baneOfArthropods] [fireAspect] [mending] [unbreaking]`
+  - `/enchantspear <sharpness> [smite] [baneOfArthropods] [knockback] [fireAspect] [looting] [lunge] [mending] [unbreaking]`
+  - `/enchanttrident <loyalty> [impaling] [riptide] [channeling] [mending] [unbreaking]`
+  - `/enchantfishingrod <luckOfTheSea> [lure] [mending] [unbreaking]`
+
+### Internal/developer changes:
+- Used `Map.of()` instead of `HashMap` in `EnchantSwordCommand` and `EnchantPickaxeCommand`
+- **Major**: Added automatic game tests when building the mod
+  - *Note: For making huge changes or adding new commands, You are still recommended to test them in-game manually just to be safe*
+- Usual code cleanup, etc.
+
 ## [2.2.0] - 2026-07-01
 
 ### Changes:

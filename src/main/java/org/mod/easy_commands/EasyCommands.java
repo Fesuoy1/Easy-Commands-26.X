@@ -76,8 +76,10 @@ public class EasyCommands implements ModInitializer {
         KnockbackCommand.register(dispatcher);
         KnockbackStickCommand.register(dispatcher);
 
-        // Health Commands
+        // Kill Commands
         KillAllCommand.register(dispatcher);
+        
+        // Health Commands
         HealCommand.register(dispatcher);
         FeedCommand.register(dispatcher);
 
