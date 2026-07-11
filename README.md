@@ -35,7 +35,10 @@ To be honest, I don't debug much since I originally made this when I was bored, 
 If you do find any, Please report them on my [GitHub repository](https://github.com/Fesuoy1/Easy-Commands-26.X/issues).
 
 ## Dependencies
+### Fabric
 - [Fabric API](https://modrinth.com/mod/fabric-api)
+### NeoForge
+- None
 
 ## This Is Open Source.
 I probably will port this to future versions of minecraft available, but definitely no plans for more backporting. If you want to backport to older versions then please [fork this repository](https://github.com/Fesuoy1/Easy-Commands-26.X).

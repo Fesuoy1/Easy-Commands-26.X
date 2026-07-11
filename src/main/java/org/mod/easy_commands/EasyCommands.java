@@ -1,12 +1,15 @@
 package org.mod.easy_commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import org.mod.easy_commands.command.enchant.EnchantAxeCommand;
 import org.mod.easy_commands.command.enchant.EnchantBowCommand;
 import org.mod.easy_commands.command.enchant.EnchantCrossbowCommand;
@@ -38,24 +41,22 @@ import org.mod.easy_commands.command.tree.ResetTreeHeightCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EasyCommands implements ModInitializer {
+@Mod(EasyCommands.MOD_ID)
+public class EasyCommands {
     public static final String MOD_ID = "easy_commands";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    @Override
-    public void onInitialize() {
-        try {
-            ModGameRules.register();
-            LOGGER.info("Easy Commands Initialized");
-            CommandRegistrationCallback.EVENT.register(this::registerCommands);
-            ServerLifecycleEvents.SERVER_STARTED.register(server -> ModGameRules.worlds = server.getAllLevels());
-            ServerLifecycleEvents.SERVER_STOPPED.register(_ -> ModGameRules.worlds = null);
-        } catch (Exception e) {
-            LOGGER.error("Easy Commands failed to initialize: {}", e.getMessage());
-        }
+    public EasyCommands(IEventBus modEventBus, ModContainer modContainer) {
+        LOGGER.info("Easy Commands Initialized");
+        NeoForge.EVENT_BUS.addListener(this::registerCommands);
+        NeoForge.EVENT_BUS.addListener(this::onServerStarting);
+        NeoForge.EVENT_BUS.addListener(this::onServerStopping);
     }
 
-    private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
+    @SubscribeEvent
+    public void registerCommands(RegisterCommandsEvent event) {
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+
         // Repair Commands
         RepairCommand.register(dispatcher);
         RepairInventoryCommand.register(dispatcher);
@@ -78,7 +79,7 @@ public class EasyCommands implements ModInitializer {
 
         // Kill Commands
         KillAllCommand.register(dispatcher);
-        
+
         // Health Commands
         HealCommand.register(dispatcher);
         FeedCommand.register(dispatcher);
@@ -97,5 +98,15 @@ public class EasyCommands implements ModInitializer {
         // Tree Commands
         ModifyTreeHeightCommand.register(dispatcher);
         ResetTreeHeightCommand.register(dispatcher);
+    }
+
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event) {
+        ModGameRules.worlds = event.getServer().getAllLevels();
+    }
+
+    @SubscribeEvent
+    public void onServerStopping(ServerStoppingEvent event) {
+        ModGameRules.worlds = null;
     }
 }

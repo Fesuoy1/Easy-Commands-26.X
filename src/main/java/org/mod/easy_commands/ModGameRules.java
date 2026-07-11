@@ -1,37 +1,81 @@
 package org.mod.easy_commands;
 
-import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.serialization.Codec;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraft.world.level.gamerules.GameRuleCategory;
+import net.minecraft.world.level.gamerules.GameRuleType;
+import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.jetbrains.annotations.NotNull;
 
+@EventBusSubscriber(modid = EasyCommands.MOD_ID)
 public class ModGameRules {
-    private static boolean registered = false;
-
     public static GameRule<Integer> TREE_HEIGHT;
     public static GameRule<Boolean> EXPLOSIVE_PROJECTILES_ENABLED;
     public static GameRule<Double> EXPLOSION_POWER;
 
-    public static void register() {
-        if (registered) return;
-        registered = true;
+    @SubscribeEvent
+    public static void onRegister(RegisterEvent event) {
+        event.register(Registries.GAME_RULE, helper -> {
+            TREE_HEIGHT = Registry.register(
+                BuiltInRegistries.GAME_RULE,
+                Identifier.fromNamespaceAndPath("easy_commands", "tree_height"),
+                new GameRule<>(
+                    GameRuleCategory.MISC,
+                    GameRuleType.INT,
+                    IntegerArgumentType.integer(1),
+                    GameRuleTypeVisitor::visitInteger,
+                    Codec.intRange(1, 256),
+                    i -> i,
+                    1,
+                    FeatureFlagSet.of()
+                )
+            );
 
-        TREE_HEIGHT = GameRuleBuilder.forInteger(1)
-                .category(GameRuleCategory.MISC)
-                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "tree_height"));
+            EXPLOSIVE_PROJECTILES_ENABLED = Registry.register(
+                BuiltInRegistries.GAME_RULE,
+                Identifier.fromNamespaceAndPath("easy_commands", "explosive_projectiles"),
+                new GameRule<>(
+                    GameRuleCategory.MISC,
+                    GameRuleType.BOOL,
+                    BoolArgumentType.bool(),
+                    GameRuleTypeVisitor::visitBoolean,
+                    Codec.BOOL,
+                    b -> b ? 1 : 0,
+                    false,
+                    FeatureFlagSet.of()
+                )
+            );
 
-        EXPLOSIVE_PROJECTILES_ENABLED = GameRuleBuilder.forBoolean(false)
-                .category(GameRuleCategory.MISC)
-                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosive_projectiles"));
-
-        EXPLOSION_POWER = GameRuleBuilder.forDouble(2.5D)
-                .category(GameRuleCategory.MISC)
-                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosion_power"));
+            EXPLOSION_POWER = Registry.register(
+                BuiltInRegistries.GAME_RULE,
+                Identifier.fromNamespaceAndPath("easy_commands", "explosion_power"),
+                new GameRule<>(
+                    GameRuleCategory.MISC,
+                    GameRuleType.INT,
+                    DoubleArgumentType.doubleArg(0.1),
+                    (visitor, rule) -> visitor.visit(rule),
+                    Codec.DOUBLE,
+                    d -> (int) Math.round(d),
+                    2.5,
+                    FeatureFlagSet.of()
+                )
+            );
+        });
     }
 
     public static Iterable<ServerLevel> worlds;
