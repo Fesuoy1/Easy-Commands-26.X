@@ -1,5 +1,12 @@
 # Changelog History
 
+## [2.3.0-neoforge] - 2026-07-11
+
+## 🎉 Mod has been ported to NeoForge!
+
+There should be no functional differences between the Fabric and NeoForge versions.
+<br>If you encounter any issues (specific to NeoForge), please report them by opening an issue.</br>
+
 ## [2.3.0] - 2026-07-01
 
 ### Changes:
