@@ -1,8 +1,6 @@
-package org.mod.easy_commands.gametest;
+package org.mod.easy_commands.neoforge.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -11,7 +9,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.permissions.LevelBasedPermissionSet;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,19 +16,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.Vec3;
 import org.mod.easy_commands.ModGameRules;
 
-@SuppressWarnings("UnstableApiUsage")
 public class EasyCommandsGameTests {
-
-    private static final String EMPTY = "fabric-gametest-api-v1:empty";
-
-    // ===========================
-    // HELPERS
-    // ===========================
 
     private static ServerPlayer createPlayer(GameTestHelper helper) {
         return helper.makeMockServerPlayerInLevel();
@@ -80,12 +68,7 @@ public class EasyCommandsGameTests {
         return helper.getLevel().clockManager().getTotalTicks(clock);
     }
 
-    // ===========================
-    // REPAIR TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testRepair(GameTestHelper helper) {
+    public static void testRepair(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_PICKAXE);
         stack.setDamageValue(50);
@@ -97,8 +80,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testRepairWithSelector(GameTestHelper helper) {
+    public static void testRepairWithSelector(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_PICKAXE);
         stack.setDamageValue(50);
@@ -110,8 +92,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testRepairNonDamageable(GameTestHelper helper) {
+    public static void testRepairNonDamageable(GameTestHelper helper) {
         var player = createPlayer(helper);
         giveMainHand(player, new ItemStack(Items.STICK));
 
@@ -119,8 +100,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testRepairInventory(GameTestHelper helper) {
+    public static void testRepairInventory(GameTestHelper helper) {
         var player = createPlayer(helper);
         var pick = new ItemStack(Items.DIAMOND_PICKAXE);
         pick.setDamageValue(50);
@@ -136,8 +116,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testRepairAll(GameTestHelper helper) {
+    public static void testRepairAll(GameTestHelper helper) {
         var p1 = createPlayer(helper);
         var p2 = createPlayer(helper);
         var s1 = new ItemStack(Items.DIAMOND_PICKAXE);
@@ -153,8 +132,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testRepairAllInventory(GameTestHelper helper) {
+    public static void testRepairAllInventory(GameTestHelper helper) {
         var p1 = createPlayer(helper);
         var pick = new ItemStack(Items.DIAMOND_PICKAXE);
         pick.setDamageValue(50);
@@ -166,12 +144,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    // ===========================
-    // ENCHANT TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testEnchantSword(GameTestHelper helper) {
+    public static void testEnchantSword(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_SWORD);
         giveMainHand(player, stack);
@@ -188,8 +161,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantPickaxe(GameTestHelper helper) {
+    public static void testEnchantPickaxe(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_PICKAXE);
         giveMainHand(player, stack);
@@ -204,8 +176,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantAxe(GameTestHelper helper) {
+    public static void testEnchantAxe(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_AXE);
         giveMainHand(player, stack);
@@ -221,8 +192,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantShovel(GameTestHelper helper) {
+    public static void testEnchantShovel(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_SHOVEL);
         giveMainHand(player, stack);
@@ -237,8 +207,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantHoe(GameTestHelper helper) {
+    public static void testEnchantHoe(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_HOE);
         giveMainHand(player, stack);
@@ -253,8 +222,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantBow(GameTestHelper helper) {
+    public static void testEnchantBow(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.BOW);
         giveMainHand(player, stack);
@@ -270,8 +238,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantCrossbow(GameTestHelper helper) {
+    public static void testEnchantCrossbow(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.CROSSBOW);
         giveMainHand(player, stack);
@@ -286,8 +253,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantMace(GameTestHelper helper) {
+    public static void testEnchantMace(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.MACE);
         giveMainHand(player, stack);
@@ -305,8 +271,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantSpear(GameTestHelper helper) {
+    public static void testEnchantSpear(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_SPEAR);
         giveMainHand(player, stack);
@@ -325,8 +290,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantTrident(GameTestHelper helper) {
+    public static void testEnchantTrident(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.TRIDENT);
         giveMainHand(player, stack);
@@ -342,8 +306,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantFishingRod(GameTestHelper helper) {
+    public static void testEnchantFishingRod(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.FISHING_ROD);
         giveMainHand(player, stack);
@@ -357,8 +320,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testEnchantWrongItem(GameTestHelper helper) {
+    public static void testEnchantWrongItem(GameTestHelper helper) {
         var player = createPlayer(helper);
         giveMainHand(player, new ItemStack(Items.DIAMOND_PICKAXE));
 
@@ -366,12 +328,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    // ===========================
-    // KNOCKBACK TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testKnockback(GameTestHelper helper) {
+    public static void testKnockback(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_SWORD);
         giveMainHand(player, stack);
@@ -382,8 +339,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testKnockbackLevel(GameTestHelper helper) {
+    public static void testKnockbackLevel(GameTestHelper helper) {
         var player = createPlayer(helper);
         var stack = new ItemStack(Items.DIAMOND_SWORD);
         giveMainHand(player, stack);
@@ -394,8 +350,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testKnockbackStick(GameTestHelper helper) {
+    public static void testKnockbackStick(GameTestHelper helper) {
         var player = createPlayer(helper);
 
         runCmd(asPlayer(player), "knockbackstick");
@@ -411,8 +366,7 @@ public class EasyCommandsGameTests {
         helper.fail("No knockback stick found in inventory");
     }
 
-    @GameTest(structure = EMPTY)
-    public void testKnockbackStickLevel(GameTestHelper helper) {
+    public static void testKnockbackStickLevel(GameTestHelper helper) {
         var player = createPlayer(helper);
 
         runCmd(asPlayer(player), "knockbackstick 30");
@@ -428,12 +382,7 @@ public class EasyCommandsGameTests {
         helper.fail("No knockback stick with level 30 found in inventory");
     }
 
-    // ===========================
-    // HEALTH TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testHeal(GameTestHelper helper) {
+    public static void testHeal(GameTestHelper helper) {
         var player = createPlayer(helper);
         player.setHealth(2.0f);
 
@@ -443,8 +392,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testHealAndFeed(GameTestHelper helper) {
+    public static void testHealAndFeed(GameTestHelper helper) {
         var player = createPlayer(helper);
         player.setHealth(2.0f);
         player.getFoodData().setFoodLevel(5);
@@ -458,8 +406,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testFeed(GameTestHelper helper) {
+    public static void testFeed(GameTestHelper helper) {
         var player = createPlayer(helper);
         player.getFoodData().setFoodLevel(5);
         player.getFoodData().setSaturation(0);
@@ -471,8 +418,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testFeedPlayers(GameTestHelper helper) {
+    public static void testFeedPlayers(GameTestHelper helper) {
         var player = createPlayer(helper);
         player.getFoodData().setFoodLevel(5);
         player.getFoodData().setSaturation(0);
@@ -483,12 +429,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    // ===========================
-    // KILL TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testKillAll(GameTestHelper helper) {
+    public static void testKillAll(GameTestHelper helper) {
         helper.spawn(EntityTypes.ZOMBIE, 1, 2, 1);
         helper.spawn(EntityTypes.SKELETON, 2, 2, 1);
 
@@ -499,12 +440,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    // ===========================
-    // TIME TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testDay(GameTestHelper helper) {
+    public static void testDay(GameTestHelper helper) {
         runCmd(console(helper), "day");
 
         long time = getClockTime(helper);
@@ -512,8 +448,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testNoon(GameTestHelper helper) {
+    public static void testNoon(GameTestHelper helper) {
         runCmd(console(helper), "noon");
 
         long time = getClockTime(helper);
@@ -521,8 +456,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testNight(GameTestHelper helper) {
+    public static void testNight(GameTestHelper helper) {
         runCmd(console(helper), "night");
 
         long time = getClockTime(helper);
@@ -530,8 +464,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testMidnight(GameTestHelper helper) {
+    public static void testMidnight(GameTestHelper helper) {
         runCmd(console(helper), "midnight");
 
         long time = getClockTime(helper);
@@ -539,12 +472,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    // ===========================
-    // EXPLOSION TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testExplode(GameTestHelper helper) {
+    public static void testExplode(GameTestHelper helper) {
         helper.setBlock(0, 2, 0, Blocks.STONE);
         var pos = helper.absolutePos(new BlockPos(0, 2, 0));
 
@@ -554,8 +482,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testSetExplosionPower(GameTestHelper helper) {
+    public static void testSetExplosionPower(GameTestHelper helper) {
         runCmd(console(helper), "setExplosionPower 7.5");
 
         double power = helper.getLevel().getGameRules().get(ModGameRules.EXPLOSION_POWER);
@@ -563,14 +490,12 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testQueryExplosionPower(GameTestHelper helper) {
+    public static void testQueryExplosionPower(GameTestHelper helper) {
         runCmd(console(helper), "setExplosionPower");
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testToggleExplosiveProjectilesOn(GameTestHelper helper) {
+    public static void testToggleExplosiveProjectilesOn(GameTestHelper helper) {
         runCmd(console(helper), "toggleExplosiveProjectiles true");
 
         boolean enabled = helper.getLevel().getGameRules().get(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED);
@@ -578,8 +503,7 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testToggleExplosiveProjectilesOff(GameTestHelper helper) {
+    public static void testToggleExplosiveProjectilesOff(GameTestHelper helper) {
         runCmd(console(helper), "toggleExplosiveProjectiles false");
 
         boolean enabled = helper.getLevel().getGameRules().get(ModGameRules.EXPLOSIVE_PROJECTILES_ENABLED);
@@ -587,18 +511,12 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testToggleExplosiveProjectilesToggle(GameTestHelper helper) {
+    public static void testToggleExplosiveProjectilesToggle(GameTestHelper helper) {
         runCmd(console(helper), "toggleExplosiveProjectiles");
         helper.succeed();
     }
 
-    // ===========================
-    // TREE TESTS
-    // ===========================
-
-    @GameTest(structure = EMPTY)
-    public void testModifyTreeHeight(GameTestHelper helper) {
+    public static void testModifyTreeHeight(GameTestHelper helper) {
         runCmd(console(helper), "modifyTreeHeight 10");
 
         int height = helper.getLevel().getGameRules().get(ModGameRules.TREE_HEIGHT);
@@ -606,14 +524,12 @@ public class EasyCommandsGameTests {
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testQueryTreeHeight(GameTestHelper helper) {
+    public static void testQueryTreeHeight(GameTestHelper helper) {
         runCmd(console(helper), "modifyTreeHeight");
         helper.succeed();
     }
 
-    @GameTest(structure = EMPTY)
-    public void testResetTreeHeight(GameTestHelper helper) {
+    public static void testResetTreeHeight(GameTestHelper helper) {
         helper.getLevel().getGameRules().set(ModGameRules.TREE_HEIGHT, 10, helper.getLevel().getServer());
 
         runCmd(console(helper), "resetTreeHeight");

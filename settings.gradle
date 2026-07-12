@@ -1,13 +1,15 @@
 pluginManagement {
-	repositories {
-		maven {
-			name = 'Fabric'
-			url = 'https://maven.fabricmc.net/'
-		}
-		mavenCentral()
-		gradlePluginPortal()
-	}
+    repositories {
+        maven { url = "https://maven.architectury.dev/" }
+        maven { url = "https://maven.fabricmc.net/" }
+        maven { url = "https://maven.neoforged.net/releases/" }
+        gradlePluginPortal()
+    }
 }
 
-// Should match your modid
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
 rootProject.name = 'easy_commands'
+include('common', 'fabric', 'neoforge')

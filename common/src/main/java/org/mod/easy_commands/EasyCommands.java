@@ -1,12 +1,7 @@
 package org.mod.easy_commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
 import org.mod.easy_commands.command.enchant.EnchantAxeCommand;
 import org.mod.easy_commands.command.enchant.EnchantBowCommand;
 import org.mod.easy_commands.command.enchant.EnchantCrossbowCommand;
@@ -38,30 +33,15 @@ import org.mod.easy_commands.command.tree.ResetTreeHeightCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EasyCommands implements ModInitializer {
+public class EasyCommands {
     public static final String MOD_ID = "easy_commands";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    @Override
-    public void onInitialize() {
-        try {
-            ModGameRules.register();
-            LOGGER.info("Easy Commands Initialized");
-            CommandRegistrationCallback.EVENT.register(this::registerCommands);
-            ServerLifecycleEvents.SERVER_STARTED.register(server -> ModGameRules.worlds = server.getAllLevels());
-            ServerLifecycleEvents.SERVER_STOPPED.register(_ -> ModGameRules.worlds = null);
-        } catch (Exception e) {
-            LOGGER.error("Easy Commands failed to initialize: {}", e.getMessage());
-        }
-    }
-
-    private void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext buildContext, Commands.CommandSelection environment) {
-        // Repair Commands
+    public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher) {
         RepairCommand.register(dispatcher);
         RepairInventoryCommand.register(dispatcher);
         RepairAllCommand.register(dispatcher);
 
-        // Enchant Commands
         EnchantSwordCommand.register(dispatcher);
         EnchantPickaxeCommand.register(dispatcher);
         EnchantAxeCommand.register(dispatcher);
@@ -76,25 +56,20 @@ public class EasyCommands implements ModInitializer {
         KnockbackCommand.register(dispatcher);
         KnockbackStickCommand.register(dispatcher);
 
-        // Kill Commands
         KillAllCommand.register(dispatcher);
-        
-        // Health Commands
+
         HealCommand.register(dispatcher);
         FeedCommand.register(dispatcher);
 
-        // Time Commands
         DayCommand.register(dispatcher);
         NoonCommand.register(dispatcher);
         NightCommand.register(dispatcher);
         MidnightCommand.register(dispatcher);
 
-        // Explosion Commands
         SetExplosionPowerCommand.register(dispatcher);
         ToggleExplosiveProjectilesCommand.register(dispatcher);
         ExplodeCommand.register(dispatcher);
 
-        // Tree Commands
         ModifyTreeHeightCommand.register(dispatcher);
         ResetTreeHeightCommand.register(dispatcher);
     }

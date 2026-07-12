@@ -7,12 +7,14 @@ on:
     paths-ignore:
       - 'README.md'
       - '.gitignore'
+      - 'CHANGELOG.md'
   pull_request:
     branches:
       - '*'
     paths-ignore:
       - 'README.md'
       - '.gitignore'
+      - 'CHANGELOG.md'
   workflow_dispatch:
 jobs:
   build:
@@ -39,8 +41,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+        run: ./gradlew :fabric:build :neoforge:build --no-daemon
       - uses: actions/upload-artifact@v6
         with:
           name: easy_commands-artifacts
-          path: build/libs/*.jar
+          path: |
+            fabric/build/libs/*.jar
+            neoforge/build/libs/*.jar

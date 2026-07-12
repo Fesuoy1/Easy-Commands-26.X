@@ -1,0 +1,11 @@
+{
+    "required": true,
+    "package": "org.mod.easy_commands.neoforge.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "GameTestMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

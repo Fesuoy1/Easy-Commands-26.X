@@ -1,9 +1,9 @@
 # gradle
 
-.gradle/
-build/
-out/
-classes/
+**/.gradle/
+**/build/
+**/out/
+**/classes/
 
 # eclipse
 
@@ -28,9 +28,9 @@ bin/
 
 *.DS_Store
 
-# fabric
+# run directories
 
-run/
+**/run/
 
 # java
 

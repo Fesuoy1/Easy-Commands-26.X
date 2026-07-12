@@ -1,0 +1,30 @@
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="Fesuoy"
+description='''
+Mod that adds 10+ commands (and some gamerules) for easy usage and convenience
+'''
+
+[[mixins]]
+config="easy_commands.mixins.json"
+
+[[mixins]]
+config="easy_commands.neoforge.mixins.json"
+
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"

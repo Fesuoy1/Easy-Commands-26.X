@@ -1,38 +1,16 @@
 package org.mod.easy_commands;
 
-import net.fabricmc.fabric.api.gamerule.v1.GameRuleBuilder;
-import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gamerules.GameRule;
-import net.minecraft.world.level.gamerules.GameRuleCategory;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public class ModGameRules {
-    private static boolean registered = false;
-
     public static GameRule<Integer> TREE_HEIGHT;
     public static GameRule<Boolean> EXPLOSIVE_PROJECTILES_ENABLED;
     public static GameRule<Double> EXPLOSION_POWER;
-
-    public static void register() {
-        if (registered) return;
-        registered = true;
-
-        TREE_HEIGHT = GameRuleBuilder.forInteger(1)
-                .category(GameRuleCategory.MISC)
-                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "tree_height"));
-
-        EXPLOSIVE_PROJECTILES_ENABLED = GameRuleBuilder.forBoolean(false)
-                .category(GameRuleCategory.MISC)
-                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosive_projectiles"));
-
-        EXPLOSION_POWER = GameRuleBuilder.forDouble(2.5D)
-                .category(GameRuleCategory.MISC)
-                .buildAndRegister(Identifier.fromNamespaceAndPath("easy_commands", "explosion_power"));
-    }
 
     public static Iterable<ServerLevel> worlds;
 
