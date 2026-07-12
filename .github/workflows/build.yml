@@ -16,6 +16,21 @@ on:
       - '.gitignore'
       - 'CHANGELOG.md'
   workflow_dispatch:
+    inputs:
+      run_game_tests:
+        description: 'Also run game tests after building'
+        type: boolean
+        default: false
+        required: false
+      game_test_platform:
+        description: 'Platform to run game tests on'
+        type: choice
+        options:
+          - both
+          - fabric
+          - neoforge
+        default: both
+        required: false
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -41,7 +56,19 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew :fabric:build :neoforge:build --no-daemon
+        run: ./gradlew :fabric:build :neoforge:build
+
+      - name: Run Fabric game tests
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_game_tests && (inputs.game_test_platform == 'fabric' || inputs.game_test_platform == 'both') }}
+        run: ./gradlew :fabric:runGametest
+
+      - name: Run NeoForge game tests
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_game_tests && (inputs.game_test_platform == 'neoforge' || inputs.game_test_platform == 'both') }}
+        run: ./gradlew :neoforge:runGametest
+
+      - name: Stop Gradle daemon
+        run: ./gradlew --stop
+
       - uses: actions/upload-artifact@v6
         with:
           name: easy_commands-artifacts
