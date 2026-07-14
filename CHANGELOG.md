@@ -1,5 +1,14 @@
 # Changelog History
 
+## [2.4.0-*] - 2026-07-15
+
+### Changes:
+- Added gamemode alias commands
+  - `/creative [players]`
+  - `/survival [players]`
+  - `/adventure [players]`
+  - `/spectator [players]`
+
 ## [2.3.0-neoforge] - 2026-07-11
 
 ## 🎉 Mod has been ported to NeoForge!
