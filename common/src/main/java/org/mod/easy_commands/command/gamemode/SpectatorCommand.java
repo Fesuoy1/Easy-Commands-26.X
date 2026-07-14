@@ -13,7 +13,7 @@ public class SpectatorCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        return CommandUtils.setGameMode(context, GameType.SPECTATOR);
+        return CommandUtils.setGameMode(context, GameType.SPECTATOR, "spectator");
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

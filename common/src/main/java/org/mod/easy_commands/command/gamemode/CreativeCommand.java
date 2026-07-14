@@ -13,7 +13,7 @@ public class CreativeCommand implements Command<CommandSourceStack> {
     
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        return CommandUtils.setGameMode(context, GameType.CREATIVE);
+        return CommandUtils.setGameMode(context, GameType.CREATIVE, "creative");
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

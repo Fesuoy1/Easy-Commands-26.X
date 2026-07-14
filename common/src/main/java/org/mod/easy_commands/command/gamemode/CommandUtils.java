@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 public final class CommandUtils {
-    public static int setGameMode(CommandContext<CommandSourceStack> context, GameType gameType) throws CommandSyntaxException {
+    public static int setGameMode(CommandContext<CommandSourceStack> context, GameType gameType, String gamemode) throws CommandSyntaxException {
         CommandSourceStack source = context.getSource();
         Collection<ServerPlayer> players;
         try {
@@ -37,7 +37,7 @@ public final class CommandUtils {
             }
             final int finalCount = count;
             if (finalCount > 0) {
-                source.sendSuccess(() -> Component.literal("Successfully set " + finalCount + " players to creative."), true);
+                source.sendSuccess(() -> Component.literal("Successfully set " + finalCount + " player(s) to " + gamemode), true);
             } else {
                 source.sendFailure(Component.literal("No players found."));
                 return 0;

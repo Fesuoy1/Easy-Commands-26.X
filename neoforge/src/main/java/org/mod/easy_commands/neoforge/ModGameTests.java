@@ -68,6 +68,11 @@ public class ModGameTests {
             registerFunction(helper, "test_modify_tree_height", EasyCommandsGameTests::testModifyTreeHeight);
             registerFunction(helper, "test_query_tree_height", EasyCommandsGameTests::testQueryTreeHeight);
             registerFunction(helper, "test_reset_tree_height", EasyCommandsGameTests::testResetTreeHeight);
+
+            registerFunction(helper, "test_creative", EasyCommandsGameTests::testCreative);
+            registerFunction(helper, "test_survival", EasyCommandsGameTests::testSurvival);
+            registerFunction(helper, "test_adventure", EasyCommandsGameTests::testAdventure);
+            registerFunction(helper, "test_spectator", EasyCommandsGameTests::testSpectator);
         });
     }
 
@@ -130,6 +135,11 @@ public class ModGameTests {
         register(event, "test_modify_tree_height", env, structure, 200);
         register(event, "test_query_tree_height", env, structure, 200);
         register(event, "test_reset_tree_height", env, structure, 200);
+
+        register(event, "test_creative", env, structure, 200);
+        register(event, "test_survival", env, structure, 200);
+        register(event, "test_adventure", env, structure, 200);
+        register(event, "test_spectator", env, structure, 200);
     }
 
     private static void register(RegisterGameTestsEvent event, String name,

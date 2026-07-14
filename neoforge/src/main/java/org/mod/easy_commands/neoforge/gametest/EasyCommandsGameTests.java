@@ -16,6 +16,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import org.mod.easy_commands.ModGameRules;
 
@@ -536,6 +537,42 @@ public class EasyCommandsGameTests {
 
         int height = helper.getLevel().getGameRules().get(ModGameRules.TREE_HEIGHT);
         helper.assertTrue(height == 1, "Tree height should be reset to 1");
+        helper.succeed();
+    }
+
+    public static void testCreative(GameTestHelper helper) {
+        var player = createPlayer(helper);
+
+        runCmd(asAdmin(player), "creative");
+
+        helper.assertTrue(player.gameMode.getGameModeForPlayer() == GameType.CREATIVE, "Expected CREATIVE");
+        helper.succeed();
+    }
+
+    public static void testSurvival(GameTestHelper helper) {
+        var player = createPlayer(helper);
+
+        runCmd(asAdmin(player), "survival");
+
+        helper.assertTrue(player.gameMode.getGameModeForPlayer() == GameType.SURVIVAL, "Expected SURVIVAL");
+        helper.succeed();
+    }
+
+    public static void testAdventure(GameTestHelper helper) {
+        var player = createPlayer(helper);
+
+        runCmd(asAdmin(player), "adventure");
+
+        helper.assertTrue(player.gameMode.getGameModeForPlayer() == GameType.ADVENTURE, "Expected ADVENTURE");
+        helper.succeed();
+    }
+
+    public static void testSpectator(GameTestHelper helper) {
+        var player = createPlayer(helper);
+
+        runCmd(asAdmin(player), "spectator");
+
+        helper.assertTrue(player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR, "Expected SPECTATOR");
         helper.succeed();
     }
 }

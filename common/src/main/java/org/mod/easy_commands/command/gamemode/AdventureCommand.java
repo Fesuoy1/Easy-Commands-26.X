@@ -13,7 +13,7 @@ public class AdventureCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        return CommandUtils.setGameMode(context, GameType.ADVENTURE);
+        return CommandUtils.setGameMode(context, GameType.ADVENTURE, "adventure");
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

@@ -13,7 +13,7 @@ public class SurvivalCommand implements Command<CommandSourceStack> {
 
     @Override
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        return CommandUtils.setGameMode(context, GameType.SURVIVAL);
+        return CommandUtils.setGameMode(context, GameType.SURVIVAL, "survival");
     }
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {

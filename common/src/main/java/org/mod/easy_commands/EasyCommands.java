@@ -18,6 +18,10 @@ import org.mod.easy_commands.command.enchant.KnockbackStickCommand;
 import org.mod.easy_commands.command.explosive.ExplodeCommand;
 import org.mod.easy_commands.command.explosive.SetExplosionPowerCommand;
 import org.mod.easy_commands.command.explosive.ToggleExplosiveProjectilesCommand;
+import org.mod.easy_commands.command.gamemode.AdventureCommand;
+import org.mod.easy_commands.command.gamemode.CreativeCommand;
+import org.mod.easy_commands.command.gamemode.SpectatorCommand;
+import org.mod.easy_commands.command.gamemode.SurvivalCommand;
 import org.mod.easy_commands.command.health.FeedCommand;
 import org.mod.easy_commands.command.health.HealCommand;
 import org.mod.easy_commands.command.kill.KillAllCommand;
@@ -69,6 +73,11 @@ public class EasyCommands {
         SetExplosionPowerCommand.register(dispatcher);
         ToggleExplosiveProjectilesCommand.register(dispatcher);
         ExplodeCommand.register(dispatcher);
+
+        CreativeCommand.register(dispatcher);
+        SurvivalCommand.register(dispatcher);
+        AdventureCommand.register(dispatcher);
+        SpectatorCommand.register(dispatcher);
 
         ModifyTreeHeightCommand.register(dispatcher);
         ResetTreeHeightCommand.register(dispatcher);
