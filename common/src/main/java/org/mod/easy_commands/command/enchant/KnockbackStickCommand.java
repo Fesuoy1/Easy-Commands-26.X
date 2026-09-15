@@ -13,6 +13,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -35,7 +36,7 @@ public class KnockbackStickCommand implements Command<CommandSourceStack> {
             ItemStack stack = enchantStick(context, level);
             int slot = player.getInventory().getFreeSlot();
             if (slot == -1) {
-                player.drop(stack, false, false);
+                player.drop(stack, false, Prediction.SERVER_ONLY);
             } else {
                 player.getInventory().setItem(slot, stack);
             }
