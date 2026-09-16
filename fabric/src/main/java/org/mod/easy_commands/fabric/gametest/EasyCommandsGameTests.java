@@ -117,10 +117,10 @@ public class EasyCommandsGameTests {
         var player = createPlayer(helper);
         var pick = new ItemStack(Items.DIAMOND_PICKAXE);
         pick.setDamageValue(50);
-        player.getInventory().add(pick);
+        player.getInventory().setItem(0, pick);
         var sword = new ItemStack(Items.DIAMOND_SWORD);
         sword.setDamageValue(30);
-        player.getInventory().add(sword);
+        player.getInventory().setItem(1, sword);
 
         runCmd(asAdmin(player), "repairinventory");
 
@@ -143,19 +143,65 @@ public class EasyCommandsGameTests {
         runCmd(asAdmin(p1), "repairall");
 
         helper.assertTrue(s1.getDamageValue() == 0, "P1's item should be repaired");
+        helper.assertTrue(s2.getDamageValue() == 0, "P2's item should be repaired by repairall");
         helper.succeed();
     }
 
     @GameTest(structure = EMPTY)
     public void testRepairAllInventory(GameTestHelper helper) {
         var p1 = createPlayer(helper);
+        var p2 = createPlayer(helper);
         var pick = new ItemStack(Items.DIAMOND_PICKAXE);
         pick.setDamageValue(50);
-        p1.getInventory().add(pick);
+        p1.getInventory().setItem(0, pick);
+        var sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.setDamageValue(30);
+        p2.getInventory().setItem(0, sword);
 
         runCmd(asAdmin(p1), "repairall true");
 
-        helper.assertTrue(pick.getDamageValue() == 0, "All inventory items should be repaired");
+        helper.assertTrue(pick.getDamageValue() == 0, "P1 inventory items should be repaired");
+        helper.assertTrue(sword.getDamageValue() == 0, "P2 inventory items should be repaired by repairall true");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testRepairOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        var executorStack = new ItemStack(Items.DIAMOND_PICKAXE);
+        executorStack.setDamageValue(50);
+        giveMainHand(executor, executorStack);
+        var targetStack = new ItemStack(Items.DIAMOND_SWORD);
+        targetStack.setDamageValue(30);
+        giveMainHand(target, targetStack);
+
+        String tag = "repair_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "repair @p[tag=" + tag + "]");
+
+        helper.assertTrue(targetStack.getDamageValue() == 0, "Target's item should be repaired");
+        helper.assertTrue(executorStack.getDamageValue() == 50, "Executor's item should stay damaged");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testRepairInventoryOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        var executorPick = new ItemStack(Items.DIAMOND_PICKAXE);
+        executorPick.setDamageValue(50);
+        executor.getInventory().setItem(0, executorPick);
+        var targetSword = new ItemStack(Items.DIAMOND_SWORD);
+        targetSword.setDamageValue(30);
+        target.getInventory().setItem(0, targetSword);
+
+        String tag = "repairinv_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "repairinventory @p[tag=" + tag + "]");
+
+        helper.assertTrue(targetSword.getDamageValue() == 0, "Target inventory should be repaired");
+        helper.assertTrue(executorPick.getDamageValue() == 50, "Executor inventory should stay damaged");
         helper.succeed();
     }
 
@@ -601,6 +647,7 @@ public class EasyCommandsGameTests {
     @GameTest(structure = EMPTY)
     public void testSurvival(GameTestHelper helper) {
         var player = createPlayer(helper);
+        player.setGameMode(GameType.CREATIVE);
 
         runCmd(asAdmin(player), "survival");
 
@@ -625,6 +672,226 @@ public class EasyCommandsGameTests {
         runCmd(asAdmin(player), "spectator");
 
         helper.assertTrue(player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR, "Expected SPECTATOR");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testHealMultiplePlayers(GameTestHelper helper) {
+        var p1 = createPlayer(helper);
+        var p2 = createPlayer(helper);
+        p1.setHealth(2.0f);
+        p2.setHealth(3.0f);
+        String tag = "heal_multi_" + p1.getStringUUID().replace("-", "");
+        p1.addTag(tag);
+        p2.addTag(tag);
+
+        runCmd(console(helper), "heal @a[tag=" + tag + "]");
+
+        helper.assertTrue(p1.getHealth() == p1.getMaxHealth(), "P1 should be at max health");
+        helper.assertTrue(p2.getHealth() == p2.getMaxHealth(), "P2 should be healed by @a[tag]");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testHealOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        executor.setHealth(2.0f);
+        target.setHealth(2.0f);
+
+        String tag = "heal_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "heal @p[tag=" + tag + "]");
+
+        helper.assertTrue(target.getHealth() == target.getMaxHealth(), "Target should be healed");
+        helper.assertTrue(executor.getHealth() == 2.0f, "Executor should stay damaged");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testHealMultiplePlayersWithFeed(GameTestHelper helper) {
+        var p1 = createPlayer(helper);
+        var p2 = createPlayer(helper);
+        p1.setHealth(2.0f);
+        p1.getFoodData().setFoodLevel(5);
+        p1.getFoodData().setSaturation(0);
+        p2.setHealth(2.0f);
+        p2.getFoodData().setFoodLevel(5);
+        p2.getFoodData().setSaturation(0);
+        String tag = "healfeed_multi_" + p1.getStringUUID().replace("-", "");
+        p1.addTag(tag);
+        p2.addTag(tag);
+
+        runCmd(console(helper), "heal @a[tag=" + tag + "] true");
+
+        helper.assertTrue(p1.getHealth() == p1.getMaxHealth(), "P1 health");
+        helper.assertTrue(p2.getHealth() == p2.getMaxHealth(), "P2 health");
+        helper.assertTrue(p1.getFoodData().getFoodLevel() == 20, "P1 food");
+        helper.assertTrue(p2.getFoodData().getFoodLevel() == 20, "P2 food");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testFeedMultiplePlayers(GameTestHelper helper) {
+        var p1 = createPlayer(helper);
+        var p2 = createPlayer(helper);
+        p1.getFoodData().setFoodLevel(5);
+        p1.getFoodData().setSaturation(0);
+        p2.getFoodData().setFoodLevel(5);
+        p2.getFoodData().setSaturation(0);
+        String tag = "feed_multi_" + p1.getStringUUID().replace("-", "");
+        p1.addTag(tag);
+        p2.addTag(tag);
+
+        runCmd(console(helper), "feed @a[tag=" + tag + "]");
+
+        helper.assertTrue(p1.getFoodData().getFoodLevel() == 20, "P1 food should be 20");
+        helper.assertTrue(p2.getFoodData().getFoodLevel() == 20, "P2 food should be 20 via @a[tag]");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testFeedOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        executor.getFoodData().setFoodLevel(5);
+        executor.getFoodData().setSaturation(0);
+        target.getFoodData().setFoodLevel(5);
+        target.getFoodData().setSaturation(0);
+
+        String tag = "feed_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asGM(executor), "feed @p[tag=" + tag + "]");
+
+        helper.assertTrue(target.getFoodData().getFoodLevel() == 20, "Target should be fed");
+        helper.assertTrue(executor.getFoodData().getFoodLevel() == 5, "Executor should stay hungry");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testCreativeOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        executor.setGameMode(GameType.SURVIVAL);
+
+        String tag = "creative_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "creative @p[tag=" + tag + "]");
+
+        helper.assertTrue(target.gameMode.getGameModeForPlayer() == GameType.CREATIVE, "Target should be CREATIVE");
+        helper.assertTrue(executor.gameMode.getGameModeForPlayer() == GameType.SURVIVAL, "Executor should stay SURVIVAL");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testSurvivalOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        target.setGameMode(GameType.CREATIVE);
+        executor.setGameMode(GameType.CREATIVE);
+
+        String tag = "survival_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "survival @p[tag=" + tag + "]");
+
+        helper.assertTrue(target.gameMode.getGameModeForPlayer() == GameType.SURVIVAL, "Target should be SURVIVAL");
+        helper.assertTrue(executor.gameMode.getGameModeForPlayer() == GameType.CREATIVE, "Executor should stay CREATIVE");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testAdventureOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        executor.setGameMode(GameType.SURVIVAL);
+
+        String tag = "adventure_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "adventure @p[tag=" + tag + "]");
+
+        helper.assertTrue(target.gameMode.getGameModeForPlayer() == GameType.ADVENTURE, "Target should be ADVENTURE");
+        helper.assertTrue(executor.gameMode.getGameModeForPlayer() == GameType.SURVIVAL, "Executor should stay SURVIVAL");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testSpectatorOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        executor.setGameMode(GameType.SURVIVAL);
+
+        String tag = "spectator_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "spectator @p[tag=" + tag + "]");
+
+        helper.assertTrue(target.gameMode.getGameModeForPlayer() == GameType.SPECTATOR, "Target should be SPECTATOR");
+        helper.assertTrue(executor.gameMode.getGameModeForPlayer() == GameType.SURVIVAL, "Executor should stay SURVIVAL");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testCreativeMultiplePlayers(GameTestHelper helper) {
+        var p1 = createPlayer(helper);
+        var p2 = createPlayer(helper);
+        String tag = "creative_multi_" + p1.getStringUUID().replace("-", "");
+        p1.addTag(tag);
+        p2.addTag(tag);
+
+        runCmd(console(helper), "creative @a[tag=" + tag + "]");
+
+        helper.assertTrue(p1.gameMode.getGameModeForPlayer() == GameType.CREATIVE, "P1 should be CREATIVE");
+        helper.assertTrue(p2.gameMode.getGameModeForPlayer() == GameType.CREATIVE, "P2 should be CREATIVE via @a[tag]");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testKnockbackOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+        var executorStack = new ItemStack(Items.DIAMOND_SWORD);
+        giveMainHand(executor, executorStack);
+        var targetStack = new ItemStack(Items.DIAMOND_SWORD);
+        giveMainHand(target, targetStack);
+
+        String tag = "knockback_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(tag);
+        runCmd(asAdmin(executor), "knockback 15 @p[tag=" + tag + "]");
+
+        helper.assertTrue(enchLevel(targetStack, ench(helper, Enchantments.KNOCKBACK)) == 15, "Target should have Knockback XV");
+        helper.assertTrue(enchLevel(executorStack, ench(helper, Enchantments.KNOCKBACK)) == 0, "Executor should stay unenchanted");
+        helper.succeed();
+    }
+
+    @GameTest(structure = EMPTY)
+    public void testKnockbackStickOtherPlayer(GameTestHelper helper) {
+        var executor = createPlayer(helper);
+        var target = createPlayer(helper);
+
+        String realTag = "kb_stick_target_" + target.getStringUUID().replace("-", "");
+        target.addTag(realTag);
+        runCmd(asAdmin(executor), "knockbackstick 20 @p[tag=" + realTag + "]");
+
+        boolean foundInTarget = false;
+        var targetInv = target.getInventory();
+        for (int i = 0; i < targetInv.getContainerSize(); i++) {
+            var s = targetInv.getItem(i);
+            if (s.is(Items.STICK) && enchLevel(s, ench(helper, Enchantments.KNOCKBACK)) == 20) {
+                foundInTarget = true;
+                break;
+            }
+        }
+        helper.assertTrue(foundInTarget, "Target should receive knockback XX stick");
+
+        boolean foundInExecutor = false;
+        var executorInv = executor.getInventory();
+        for (int i = 0; i < executorInv.getContainerSize(); i++) {
+            var s = executorInv.getItem(i);
+            if (s.is(Items.STICK) && enchLevel(s, ench(helper, Enchantments.KNOCKBACK)) > 0) {
+                foundInExecutor = true;
+                break;
+            }
+        }
+        helper.assertTrue(!foundInExecutor, "Executor should not receive a stick");
         helper.succeed();
     }
 }

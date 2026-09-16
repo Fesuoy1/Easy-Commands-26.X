@@ -27,6 +27,8 @@ public class ModGameTests {
             registerFunction(helper, "test_repair_inventory", EasyCommandsGameTests::testRepairInventory);
             registerFunction(helper, "test_repair_all", EasyCommandsGameTests::testRepairAll);
             registerFunction(helper, "test_repair_all_inventory", EasyCommandsGameTests::testRepairAllInventory);
+            registerFunction(helper, "test_repair_other_player", EasyCommandsGameTests::testRepairOtherPlayer);
+            registerFunction(helper, "test_repair_inventory_other_player", EasyCommandsGameTests::testRepairInventoryOtherPlayer);
 
             registerFunction(helper, "test_enchant_sword", EasyCommandsGameTests::testEnchantSword);
             registerFunction(helper, "test_enchant_pickaxe", EasyCommandsGameTests::testEnchantPickaxe);
@@ -45,11 +47,18 @@ public class ModGameTests {
             registerFunction(helper, "test_knockback_level", EasyCommandsGameTests::testKnockbackLevel);
             registerFunction(helper, "test_knockback_stick", EasyCommandsGameTests::testKnockbackStick);
             registerFunction(helper, "test_knockback_stick_level", EasyCommandsGameTests::testKnockbackStickLevel);
+            registerFunction(helper, "test_knockback_other_player", EasyCommandsGameTests::testKnockbackOtherPlayer);
+            registerFunction(helper, "test_knockback_stick_other_player", EasyCommandsGameTests::testKnockbackStickOtherPlayer);
 
             registerFunction(helper, "test_heal", EasyCommandsGameTests::testHeal);
             registerFunction(helper, "test_heal_and_feed", EasyCommandsGameTests::testHealAndFeed);
+            registerFunction(helper, "test_heal_multiple_players", EasyCommandsGameTests::testHealMultiplePlayers);
+            registerFunction(helper, "test_heal_other_player", EasyCommandsGameTests::testHealOtherPlayer);
+            registerFunction(helper, "test_heal_multiple_players_with_feed", EasyCommandsGameTests::testHealMultiplePlayersWithFeed);
             registerFunction(helper, "test_feed", EasyCommandsGameTests::testFeed);
             registerFunction(helper, "test_feed_players", EasyCommandsGameTests::testFeedPlayers);
+            registerFunction(helper, "test_feed_multiple_players", EasyCommandsGameTests::testFeedMultiplePlayers);
+            registerFunction(helper, "test_feed_other_player", EasyCommandsGameTests::testFeedOtherPlayer);
 
             registerFunction(helper, "test_kill_all", EasyCommandsGameTests::testKillAll);
 
@@ -73,6 +82,11 @@ public class ModGameTests {
             registerFunction(helper, "test_survival", EasyCommandsGameTests::testSurvival);
             registerFunction(helper, "test_adventure", EasyCommandsGameTests::testAdventure);
             registerFunction(helper, "test_spectator", EasyCommandsGameTests::testSpectator);
+            registerFunction(helper, "test_creative_other_player", EasyCommandsGameTests::testCreativeOtherPlayer);
+            registerFunction(helper, "test_survival_other_player", EasyCommandsGameTests::testSurvivalOtherPlayer);
+            registerFunction(helper, "test_adventure_other_player", EasyCommandsGameTests::testAdventureOtherPlayer);
+            registerFunction(helper, "test_spectator_other_player", EasyCommandsGameTests::testSpectatorOtherPlayer);
+            registerFunction(helper, "test_creative_multiple_players", EasyCommandsGameTests::testCreativeMultiplePlayers);
         });
     }
 
@@ -94,6 +108,8 @@ public class ModGameTests {
         register(event, "test_repair_inventory", env, structure, 200);
         register(event, "test_repair_all", env, structure, 200);
         register(event, "test_repair_all_inventory", env, structure, 200);
+        register(event, "test_repair_other_player", env, structure, 200);
+        register(event, "test_repair_inventory_other_player", env, structure, 200);
 
         register(event, "test_enchant_sword", env, structure, 200);
         register(event, "test_enchant_pickaxe", env, structure, 200);
@@ -112,11 +128,18 @@ public class ModGameTests {
         register(event, "test_knockback_level", env, structure, 200);
         register(event, "test_knockback_stick", env, structure, 200);
         register(event, "test_knockback_stick_level", env, structure, 200);
+        register(event, "test_knockback_other_player", env, structure, 200);
+        register(event, "test_knockback_stick_other_player", env, structure, 200);
 
         register(event, "test_heal", env, structure, 200);
         register(event, "test_heal_and_feed", env, structure, 200);
+        register(event, "test_heal_multiple_players", env, structure, 200);
+        register(event, "test_heal_other_player", env, structure, 200);
+        register(event, "test_heal_multiple_players_with_feed", env, structure, 200);
         register(event, "test_feed", env, structure, 200);
         register(event, "test_feed_players", env, structure, 200);
+        register(event, "test_feed_multiple_players", env, structure, 200);
+        register(event, "test_feed_other_player", env, structure, 200);
 
         register(event, "test_kill_all", env, structure, 200);
 
@@ -140,6 +163,11 @@ public class ModGameTests {
         register(event, "test_survival", env, structure, 200);
         register(event, "test_adventure", env, structure, 200);
         register(event, "test_spectator", env, structure, 200);
+        register(event, "test_creative_other_player", env, structure, 200);
+        register(event, "test_survival_other_player", env, structure, 200);
+        register(event, "test_adventure_other_player", env, structure, 200);
+        register(event, "test_spectator_other_player", env, structure, 200);
+        register(event, "test_creative_multiple_players", env, structure, 200);
     }
 
     private static void register(RegisterGameTestsEvent event, String name,
