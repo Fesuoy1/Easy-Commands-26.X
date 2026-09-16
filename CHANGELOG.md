@@ -1,5 +1,10 @@
 # Changelog History
 
+## [2.4.1-*] - 2026-09-16
+
+### Changes:
+- Ported to Minecraft 26.3
+
 ## [2.4.0-*] - 2026-07-15
 
 ### Changes:
