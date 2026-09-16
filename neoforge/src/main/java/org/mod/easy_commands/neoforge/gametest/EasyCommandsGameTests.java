@@ -66,7 +66,7 @@ public class EasyCommandsGameTests {
     private static long getClockTime(GameTestHelper helper) {
         var dimType = helper.getLevel().dimensionTypeRegistration();
         var clock = dimType.value().defaultClock().orElseThrow();
-        return helper.getLevel().clockManager().getTotalTicks(clock);
+        return helper.getLevel().clockManager().getInstance(clock).totalTicks();
     }
 
     public static void testRepair(GameTestHelper helper) {

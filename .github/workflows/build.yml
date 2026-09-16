@@ -26,8 +26,10 @@ on:
         description: 'Platform to run game tests on'
         type: choice
         options:
+          - both
           - fabric
-        default: fabric
+          - neoforge
+        default: both
         required: false
 jobs:
   build:
@@ -54,11 +56,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        run: ./gradlew :fabric:build
+        run: ./gradlew :fabric:build :neoforge:build
 
       - name: Run Fabric game tests
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_game_tests && inputs.game_test_platform == 'fabric' }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_game_tests && (inputs.game_test_platform == 'fabric' || inputs.game_test_platform == 'both') }}
         run: ./gradlew :fabric:runGametest
+
+      - name: Run NeoForge game tests
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_game_tests && (inputs.game_test_platform == 'neoforge' || inputs.game_test_platform == 'both') }}
+        run: ./gradlew :neoforge:runGametest
 
       - name: Stop Gradle daemon
         run: ./gradlew --stop
@@ -68,3 +74,4 @@ jobs:
           name: easy_commands-artifacts
           path: |
             fabric/build/libs/*.jar
+            neoforge/build/libs/*.jar
